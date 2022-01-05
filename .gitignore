@@ -1,0 +1,4 @@
+venv
+blockchain/__pycache__
+utils/__pycache__
+test/__pycache__
