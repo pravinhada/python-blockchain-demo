@@ -1,3 +1,6 @@
+import json
+
+
 class Block:
     """
     A block represent a data structure that holds:
@@ -16,8 +19,13 @@ class Block:
         self.transactions = transactions
         self.hash = hash
 
-    def __str__(self):
-        return f'[{self.block_id}-{self.nonce}-{self.prev_hash}-{self.hash}-{self.transactions}]'
-
     def __repr__(self):
-        return f'[{self.block_id}-{self.nonce}-{self.prev_hash}-{self.hash}-{self.transactions}]'
+        json_str = {
+            "block_id": self.block_id,
+            "prev_hash": self.prev_hash,
+            "nonce": self.nonce,
+            "transactions": json.dumps(self.transactions, default=lambda el: el.__dict__),
+            "hash": self.hash
+
+        }
+        return json.dumps(json_str)

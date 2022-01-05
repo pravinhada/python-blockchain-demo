@@ -1,7 +1,7 @@
 from blockchain.transaction import Transaction
 from blockchain.block import Block
 from blockchain.blockchain import Blockchain
-from utils.block_hash import generate_block_id
+from utils.block_hash import generate_block_id, generate_block_hash
 
 tx1 = Transaction(sender='paul', reciever='jdoe', amount=1.0)
 tx2 = Transaction(sender='peter', reciever='pete', amount=1.2)
@@ -14,5 +14,10 @@ block2 = Block(1, '', 0, [Transaction(
 
 blockchain = Blockchain([block1, block2], [])
 
+print(transactions)
+print(block1)
 print(blockchain)
 print(generate_block_id(blockchain))
+
+print(generate_block_hash(block_id=1, nonce=0,
+      prev_hash='cb5fe943b6508eebda1233375620ba05afdf9ac567a4eb4ab46d83f3904886fd', transactions=transactions))

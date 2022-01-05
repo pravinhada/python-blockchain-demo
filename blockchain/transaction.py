@@ -1,4 +1,6 @@
 from datetime import datetime
+import json
+
 
 class Transaction:
     """
@@ -9,10 +11,7 @@ class Transaction:
         self.sender = sender
         self.receiver = reciever
         self.amount = amount
-        self.date = datetime.now()
-
-    def __str__(self):
-        return f'({self.sender} sent {self.receiver} {self.amount} bitcoins on {self.date.strftime("%m/%d/%Y, %H:%M:%S")})'
+        self.date = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
 
     def __repr__(self):
-        return f'({self.sender} sent {self.receiver} {self.amount} bitcoins on {self.date.strftime("%m/%d/%Y, %H:%M:%S")})'
+        return json.dumps(self.__dict__)
