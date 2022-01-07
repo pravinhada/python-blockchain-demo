@@ -29,3 +29,7 @@ class Block:
 
         }
         return json.dumps(json_str)
+
+
+def get_genesis_block():
+    return Block(block_id=0, prev_hash='', nonce=0, transactions=[], hash='')

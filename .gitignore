@@ -1,4 +1,6 @@
+.vscode
 venv
 blockchain/__pycache__
 utils/__pycache__
 test/__pycache__
+data
