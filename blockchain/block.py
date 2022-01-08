@@ -1,5 +1,7 @@
 import json
 
+from blockchain import transaction
+
 
 class Block:
     """
@@ -24,7 +26,7 @@ class Block:
             "block_id": self.block_id,
             "prev_hash": self.prev_hash,
             "nonce": self.nonce,
-            "transactions": json.dumps(self.transactions, default=lambda el: el.__dict__),
+            "transactions": [el.__dict__ for el in self.transactions],
             "hash": self.hash
 
         }
