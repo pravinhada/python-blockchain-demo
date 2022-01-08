@@ -37,7 +37,7 @@ def read_block(block):
 
 def read_transaction(transaction):
     """ read the json transaction to the transaction object """
-    return Transaction(transaction['sender'], transaction['receiver'], float(transaction['amount']))
+    return Transaction(transaction['sender'], transaction['receiver'], float(transaction['amount']), date=transaction['date'])
 
 
 def read_blockchain_file(file_name):

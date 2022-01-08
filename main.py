@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-import json
 
 from blockchain.blockchain import read_blockchains, add_open_transaction, mine_new_block
 from blockchain.transaction import Transaction
@@ -17,8 +16,10 @@ def index():
 def get_blockchain():
     """ return all the blocks in the blockchain """
     blocks, _ = read_blockchains()
-    # return jsonify([block.__dict__ for block in blocks])
-    return json.dumps(blocks, default=lambda b: b.__dict__, indent=4)
+    chains = [block.__dict__.copy() for block in blocks]
+    for chain in chains:
+        chain['transactions'] = [tx.__dict__ for tx in chain['transactions']]
+    return jsonify(chains), 200
 
 
 @app.route('/create_transaction', methods=['POST'])
