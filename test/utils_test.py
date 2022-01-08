@@ -36,7 +36,7 @@ class BlockHashTest(unittest.TestCase):
         prev_hash = self.blocks[-1].hash
         hashed_block = hash_block(
             block_id=block_id, prev_hash=prev_hash, transactions=self.open_transactions)
-
+        print(hashed_block)
 
 if __name__ == '__main__':
     unittest.main()

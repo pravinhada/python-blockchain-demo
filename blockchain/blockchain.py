@@ -1,8 +1,11 @@
 import json
 from os import error
 
+from werkzeug.utils import escape
+
 from blockchain.block import Block, get_genesis_block
 from blockchain.transaction import Transaction
+from utils.block_hash import generate_block_id, hash_block
 
 
 class Blockchain:
@@ -75,17 +78,43 @@ def read_blockchains():
 
 def add_open_transaction(transaction=[]):
     """ add new transactions to the open transactions list """
-    blockchain, open_transactions = read_blockchains()
+    blocks, open_transactions = read_blockchains()
     open_transactions.append(transaction)
     try:
         with open('data/blockchain.txt', mode='w') as f:
-            f.write(str(blockchain).replace("'", '"'))
+            f.write(str(blocks).replace("'", '"'))
             f.write('\n')
             f.write(str(open_transactions).replace("'", '"'))
     except error:
         print('error updating blockchain data, try again!' + error)
 
 
-def mine_block():
-    """ mine the new block and add this to the blockchain """
-    pass
+def save_blockchain(blocks, open_transactions):
+    """ save both blockchain and open transaction to the file """
+    try:
+        with open('data/blockchain.txt', mode='w') as f:
+            f.write(str(blocks))
+            f.write('\n')
+            f.write(str(open_transactions))
+    except error:
+        print('error while saving the mined blockchain' + error)
+
+
+def mine_new_block():
+    """ 
+    mine the new block and add this to the blockchain
+        1: get all the open transactions
+        2: read previous blockchain
+        3: read new block id
+        4: create new hash for newily mined block
+        5: update the blockchain file and add new block to chain
+    """
+    blockchain = read_blockchain_file('data/blockchain.txt')
+    new_block_id = generate_block_id(blockchain)
+    prev_hash = blockchain.blocks[-1].hash
+    hashed_block = hash_block(
+        block_id=new_block_id, prev_hash=prev_hash, transactions=blockchain.open_transactions)
+    new_blocks = blockchain.blocks.copy()
+    new_blocks.append(hashed_block)
+    print(new_blocks)
+    save_blockchain(new_blocks, [])
