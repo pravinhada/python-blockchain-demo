@@ -33,18 +33,24 @@ def read_block(block):
     for tnx in mapped_transactions:
         transactions.append(read_transaction(tnx))
     return Block(block['block_id'], block['prev_hash'],
-                 block['nonce'], transactions, block['hash'])
+                 block['nonce'], transactions, block['hash'], block['created_date'])
 
 
 def read_transaction(transaction):
     """ read the json transaction to the transaction object """
-    return Transaction(transaction['sender'], transaction['receiver'], float(transaction['amount']), date=transaction['date'])
+    return Transaction(transaction['sender'], transaction['receiver'], float(transaction['amount']), created_date=transaction['created_date'])
 
 
 def read_blockchain_file(file_name):
     """ read the blockchain from the given file as file_name, the first line of file is blockchain and second line is
     open_transactions """
     blockchain = None
+    import os
+
+    # check if file is empty
+    if os.stat(file_name).st_size == 0:
+        return None
+
     try:
         with open(file_name, mode='r') as f:
             loaded_blocks = json.loads(f.readline())
@@ -64,7 +70,7 @@ def read_blockchain_file(file_name):
             blockchain = Blockchain(blocks, open_transactions)
 
     except Exception as e:
-        print('Error: ', e)
+        print('Error while reading blockchain file: ', e)
 
     return blockchain
 
@@ -130,8 +136,7 @@ def mine_new_block():
     blockchain = read_blockchain_file('data/blockchain.txt')
     new_block_id = generate_block_id(blockchain)
     prev_hash = blockchain.blocks[-1].hash
-    open_transactions = [tx.copy()
-                         for tx in blockchain.open_transactions]
+    open_transactions = blockchain.open_transactions[:]
 
     # adding reward transaction too
     open_transactions.append(Transaction(

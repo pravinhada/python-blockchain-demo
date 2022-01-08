@@ -30,7 +30,7 @@ class Block:
             "nonce": self.nonce,
             "transactions": [el.__dict__ for el in self.transactions],
             "hash": self.hash,
-            "time": self.created_date
+            "created_date": self.created_date
 
         }
         return json.dumps(json_str)
