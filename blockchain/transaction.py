@@ -1,5 +1,6 @@
 from datetime import datetime
-import json
+
+import utils.blockchain_constants as constants
 
 
 class Transaction:
@@ -7,14 +8,11 @@ class Transaction:
     A transaction class containing sender, receiver and amount data
     """
 
-    def __init__(self, sender, receiver, amount=0.0, date=None):
+    def __init__(self, sender, receiver, amount=0.0, created_date=datetime.now().strftime(constants.DEFAULT_DATE_FORMAT)):
         self.sender = sender
         self.receiver = receiver
         self.amount = amount
-        if date is None:
-            self.date = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-        else:
-            self.date = date
+        self.created_date = created_date
 
     def __repr__(self):
         return str(self.__dict__)

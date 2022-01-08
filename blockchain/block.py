@@ -1,6 +1,7 @@
 import json
+from datetime import datetime
 
-from blockchain import transaction
+import utils.blockchain_constants as constants
 
 
 class Block:
@@ -14,12 +15,13 @@ class Block:
             will be the prev_hash in next block in the blockchain
     """
 
-    def __init__(self, block_id, prev_hash, nonce, transactions, hash):
+    def __init__(self, block_id, prev_hash, nonce, transactions, hash, created_date=datetime.now().strftime(constants.DEFAULT_DATE_FORMAT)):
         self.block_id = block_id
         self.prev_hash = prev_hash
         self.nonce = nonce
         self.transactions = transactions
         self.hash = hash
+        self.created_date = created_date
 
     def __repr__(self):
         json_str = {
@@ -27,11 +29,12 @@ class Block:
             "prev_hash": self.prev_hash,
             "nonce": self.nonce,
             "transactions": [el.__dict__ for el in self.transactions],
-            "hash": self.hash
+            "hash": self.hash,
+            "time": self.created_date
 
         }
         return json.dumps(json_str)
 
 
-def get_genesis_block():
-    return Block(block_id=0, prev_hash='', nonce=0, transactions=[], hash='')
+def create_genesis_block():
+    return Block(block_id=0, prev_hash='', nonce=0, transactions=[], hash='', created_date='07/01/2009, 11:11:11')

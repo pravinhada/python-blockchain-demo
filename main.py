@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, jsonify, render_template, request
 
-from blockchain.blockchain import read_blockchains, add_open_transaction, mine_new_block
+from blockchain.blockchain import (add_open_transaction, mine_new_block,
+                                   read_blockchains)
 from blockchain.transaction import Transaction
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ def get_blockchain():
     return jsonify(chains), 200
 
 
-@app.route('/create_transaction', methods=['POST'])
+@app.route('/transaction', methods=['POST'])
 def create_transaction():
     """ create new bitcoin transaction, need sender, receiver and amount """
     data = request.json
@@ -34,11 +35,11 @@ def create_transaction():
     return 'successful'
 
 
-@app.route('/open_transactions', methods=['GET'])
+@app.route('/transactions', methods=['GET'])
 def get_open_transactions():
     """ return all open transactions before the block is created """
     _, open_transactions = read_blockchains()
-    return jsonify([obj.__dict__ for obj in open_transactions])
+    return jsonify([obj.__dict__ for obj in open_transactions]), 200
 
 
 @app.route('/mine', methods=['GET'])
@@ -53,3 +54,4 @@ if __name__ == '__main__':
     port = 5001
     print(f'Server is running at {host}:{port}')
     app.run(host=host, port=port)
+    
