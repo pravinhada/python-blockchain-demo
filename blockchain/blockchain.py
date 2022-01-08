@@ -1,7 +1,8 @@
 import json
-from os import O_EXCL, error
+from os import error
 
 from blockchain.block import Block, get_genesis_block
+from blockchain.transaction import Transaction
 
 
 class Blockchain:
@@ -21,18 +22,55 @@ class Blockchain:
         return json.dumps(json_str)
 
 
+def read_block(block):
+    """ read the json block to the block object """
+    mapped_transactions = block['transactions']
+    transactions = []
+    for tnx in mapped_transactions:
+        transactions.append(read_transaction(tnx))
+    return Block(block['block_id'], block['prev_hash'],
+                 block['nonce'], transactions, block['hash'])
+
+
+def read_transaction(transaction):
+    """ read the json transaction to the transaction object """
+    return Transaction(transaction['sender'], transaction['receiver'], float(transaction['amount']))
+
+
+def read_blockchain_file(file_name):
+    """ read the blockchain from the given file as file_name, the first line of file is blockchain and second line is open_transactions """
+    blockchain = None
+    try:
+        with open(file_name, mode='r') as f:
+            loaded_blocks = json.loads(f.readline())
+            loaded_transactions = json.loads(f.readline())
+
+            blocks = []
+            open_transactions = []
+
+            for chain in loaded_blocks:
+                block = read_block(chain)
+                blocks.append(block)
+
+            for tnx in loaded_transactions:
+                transaction = read_transaction(tnx)
+                open_transactions.append(transaction)
+
+            blockchain = Blockchain(blocks, open_transactions)
+
+    except Exception as e:
+        print('Error: ', e)
+
+    return blockchain
+
+
 def read_blockchains():
     """ Returns all the blockchain, if stored in file, retrieve it otherwise return genesis block for now """
-    try:
-        with open('data/blockchain.txt', mode='r') as f:
-            # first line blockchain
-            chain = json.loads(f.readline())
-            # second line open transaction
-            open_transactions = json.loads(f.readline())
-            return (chain, open_transactions)
-    except:
-        print('file not found, returning genesis block')
-        return (get_genesis_block(), [])
+    blockchain = read_blockchain_file('data/blockchain.txt')
+    if blockchain is None:
+        return get_genesis_block(), []
+    else:
+        return blockchain.blocks, blockchain.open_transactions
 
 
 def add_open_transaction(transaction=[]):
@@ -46,3 +84,8 @@ def add_open_transaction(transaction=[]):
             f.write(str(open_transactions).replace("'", '"'))
     except error:
         print('error updating blockchain data, try again!' + error)
+
+
+def mine_block():
+    """ mine the new block and add this to the blockchain """
+    pass

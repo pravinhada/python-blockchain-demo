@@ -16,8 +16,8 @@ def index():
 @app.route('/blockchain', methods=['GET'])
 def get_blockchain():
     """ return all the blocks in the blockchain """
-    chain, _ = read_blockchains()
-    return jsonify(chain)
+    blockchain, _ = read_blockchains()
+    return jsonify([obj.__dict__ for obj in blockchain])
 
 
 @app.route('/create_transaction', methods=['POST'])
@@ -27,7 +27,7 @@ def create_transaction():
     sender = data['sender']
     receiver = data['receiver']
     amount = int(data['amount'])
-    transaction = Transaction(sender=sender, reciever=receiver, amount=amount)
+    transaction = Transaction(sender=sender, receiver=receiver, amount=amount)
     add_open_transaction(transaction=transaction)
     return 'successful'
 
@@ -36,7 +36,7 @@ def create_transaction():
 def get_open_transactions():
     """ return all open transactions before the block is created """
     _, open_transactions = read_blockchains()
-    return jsonify(open_transactions)
+    return jsonify([obj.__dict__ for obj in open_transactions])
 
 
 if __name__ == '__main__':
