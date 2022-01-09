@@ -25,6 +25,9 @@ class Blockchain:
         }
         return json.dumps(json_str)
 
+    def get_balance(self):
+        pass
+
 
 def read_block(block):
     """ read the json block to the block object """
@@ -100,7 +103,7 @@ def add_genesis_block(genesis_block):
         print('Failed to write genesis block to file', e)
 
 
-def add_open_transaction(transaction=[]):
+def add_open_transaction(transaction=None):
     """ add new transactions to the open transactions list """
     blocks, open_transactions = read_blockchains()
     open_transactions.append(transaction)
@@ -122,6 +125,9 @@ def save_blockchain(blocks, open_transactions):
             f.write(str(open_transactions))
     except error:
         print('error while saving the mined blockchain' + error)
+        return False
+
+    return True
 
 
 def mine_new_block():
@@ -153,4 +159,8 @@ def mine_new_block():
     hashed_block = hash_block(block_to_hash)
     new_blocks = blockchain.blocks.copy()
     new_blocks.append(hashed_block)
-    save_blockchain(new_blocks, [])
+    is_success = save_blockchain(new_blocks, [])
+    if is_success:
+        print('Blockchain mine is successful, Congratulation, you got 6.25 bitcoins')
+    else:
+        print('Better luck mining next time')
