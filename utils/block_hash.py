@@ -3,11 +3,11 @@ import hashlib
 from blockchain.block import Block
 
 
-def generate_block_id(blockchain):
+def generate_block_id(blocks):
     """
     generate the unique block_id for the new blockchain block
     """
-    return blockchain.blocks[-1].block_id + 1
+    return blocks[-1].block_id + 1
 
 
 def hash_block(block: Block):
@@ -31,6 +31,6 @@ def hash_block(block: Block):
         prev_hash=block.prev_hash,
         nonce=nonce,
         transactions=block.transactions,
-        hash=generated_hash,
+        block_hash=generated_hash,
         created_date=block.created_date
     )

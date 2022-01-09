@@ -3,18 +3,17 @@ from datetime import datetime
 
 import utils.blockchain_constants as constants
 from blockchain.block import Block
-from blockchain.blockchain import read_blockchain_file
+from blockchain.blockchain import Blockchain
 from utils.block_hash import generate_block_id, hash_block
 
 
 class BlockHashTest(unittest.TestCase):
-
     blocks = []
     open_transactions = []
     blockchain = None
 
     def setUp(self):
-        self.blockchain = read_blockchain_file('data/blockchain.txt')
+        self.blockchain = Blockchain()
         if self.blockchain is None:
             raise Exception('blockchain file cannot be empty')
         self.blocks = self.blockchain.blocks
@@ -29,14 +28,14 @@ class BlockHashTest(unittest.TestCase):
         self.assertIsNotNone(self.open_transactions)
 
     def test_generate_block_id(self):
-        block_id = generate_block_id(self.blockchain)
+        block_id = generate_block_id(self.blockchain.blocks)
         print(f'New block id is: {block_id}')
         self.assertIsNotNone(block_id)
 
     def test_hash_block(self):
-        block_id = generate_block_id(self.blockchain)
-        prev_hash = self.blocks[-1].hash
-        block = Block(block_id=block_id, prev_hash=prev_hash, nonce=0, transactions=self.open_transactions, hash='',
+        block_id = generate_block_id(self.blockchain.blocks)
+        prev_hash = self.blocks[-1].block_hash
+        block = Block(block_id=block_id, prev_hash=prev_hash, nonce=0, transactions=self.open_transactions, block_hash='',
                       created_date=datetime.now().strftime(constants.DEFAULT_DATE_FORMAT))
         hashed_block = hash_block(block)
         print(hashed_block)

@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, render_template, request
 
-from blockchain.blockchain import (add_open_transaction, mine_new_block,
-                                   read_blockchains)
+from blockchain.blockchain import Blockchain
 from blockchain.transaction import Transaction
 
 app = Flask(__name__)
+app.debug = True
+
+blockchain = Blockchain()
 
 
 @app.route('/', methods=['GET'])
@@ -16,7 +18,7 @@ def index():
 @app.route('/blockchain', methods=['GET'])
 def get_blockchain():
     """ return all the blocks in the blockchain """
-    blocks, _ = read_blockchains()
+    blocks = blockchain.read_blockchains()
     chains = [block.__dict__.copy() for block in blocks]
     for chain in chains:
         chain['transactions'] = [tx.__dict__ for tx in chain['transactions']]
@@ -31,21 +33,21 @@ def create_transaction():
     receiver = data['receiver']
     amount = int(data['amount'])
     transaction = Transaction(sender=sender, receiver=receiver, amount=amount)
-    add_open_transaction(transaction=transaction)
+    blockchain.add_new_transaction(transaction=transaction)
     return 'successful'
 
 
 @app.route('/transactions', methods=['GET'])
 def get_open_transactions():
     """ return all open transactions before the block is created """
-    _, open_transactions = read_blockchains()
+    open_transactions = blockchain.read_open_transactions()
     return jsonify([obj.__dict__ for obj in open_transactions]), 200
 
 
 @app.route('/mine', methods=['GET'])
 def mine_block():
     """ mine the new block and add to the blockchain list/file """
-    mine_new_block()
+    blockchain.mine_new_block()
     return 'successful'
 
 
@@ -54,4 +56,3 @@ if __name__ == '__main__':
     port = 5001
     print(f'Server is running at {host}:{port}')
     app.run(host=host, port=port)
-    

@@ -9,18 +9,25 @@ class Block:
     A block represent a data structure that holds:
         block_id: id of this block
         prev_hash: A hash from the previous block
-        nonce: a only one use of value to hash the given block
+        nonce: only one use of value to hash the given block
         transactions: list of all the transaction
-        hash: the hash of the current block which can be calculated from above block_id, prev_hash, nonce and transactions, this hash
-            will be the prev_hash in next block in the blockchain
+        hash: the hash of the current block which can be calculated from above block_id, prev_hash, nonce and transactions,
+        this hash will be the prev_hash in next block in the blockchain
     """
 
-    def __init__(self, block_id, prev_hash, nonce, transactions, hash, created_date=datetime.now().strftime(constants.DEFAULT_DATE_FORMAT)):
+    def __init__(self,
+                 block_id,
+                 prev_hash,
+                 nonce,
+                 transactions,
+                 block_hash,
+                 created_date=datetime.now().strftime(constants.DEFAULT_DATE_FORMAT)
+                 ):
         self.block_id = block_id
         self.prev_hash = prev_hash
         self.nonce = nonce
         self.transactions = transactions
-        self.hash = hash
+        self.block_hash = block_hash
         self.created_date = created_date
 
     def __repr__(self):
@@ -29,7 +36,7 @@ class Block:
             "prev_hash": self.prev_hash,
             "nonce": self.nonce,
             "transactions": [el.__dict__ for el in self.transactions],
-            "hash": self.hash,
+            "block_hash": self.block_hash,
             "created_date": self.created_date
 
         }
@@ -37,4 +44,4 @@ class Block:
 
 
 def create_genesis_block():
-    return Block(block_id=0, prev_hash='', nonce=0, transactions=[], hash='', created_date='07/01/2009, 11:11:11')
+    return Block(block_id=0, prev_hash='', nonce=0, transactions=[], block_hash='', created_date='07/01/2009, 11:11:11')
