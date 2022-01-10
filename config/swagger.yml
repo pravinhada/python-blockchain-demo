@@ -1,0 +1,71 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Bitcoin REST API
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /blockchain:
+    get:
+      operationId: "api.get_blockchain"
+      tags:
+        - "Blockchain"
+      description: "Read the list of block in blockchain"
+      responses:
+        200:
+          description: "Successfully read list of blocks in blockchain"
+          schema:
+            type: "array"
+            items:
+              properties:
+                block_id: 
+                  type: "string"
+                prev_hash:
+                  type: "string"
+  /transaction:
+    get:
+      operationId: "api.get_open_transactions"
+      tags:
+        - "Transaction"
+      description: "Read all the open transactions"
+      responses:
+        200:
+          description: "Successfully read list of all open transactions"
+    post:
+      operationId: "api.create_transaction"
+      tags:
+        - "Transaction"
+      description: "Add transactions"
+      responses:
+        200:
+          description: "Successfully created transactions"
+          schema:
+            type: "array"
+            items:
+              properties:
+                sender: 
+                  type: "string"
+                receiver:
+                  type: "string"   
+                amount:
+                  type: "string"       
+  /mine:
+    post:
+      operationId: "api.mine"
+      tags:
+        - "Mine-Bitcoin"
+      description: "Mine the bitcoins"
+      responses:
+        200:
+          description: "Successfully mined the bitcoin transactions"
+
+  
+                
+
