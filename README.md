@@ -6,7 +6,8 @@
 
 ##### Currently supported APIs
 - [GET]/ return homepage
-- [GET]/blockchain return the blockchain as json
-- [GET]/transactions return open transactions as json
-- [POST]/transaction post the new transcation accepted only json
-- [GET]/mine mine the bitcoin, update blockchain and open transactions
+- [GET]/api/blockchain, return the blockchain as json
+- [GET]/api/transaction, return open transactions as json
+- [POST]/api/transaction, post the new transactions accepted only json
+- [GET]/api/mine, mine the bitcoin, update blockchain and open transactions
+- [GET]/api/balance, return the bitcoin balance for the current user

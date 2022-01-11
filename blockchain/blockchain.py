@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
+import functools
 
 import utils.blockchain_constants as constants
 from blockchain.block import Block, create_genesis_block
@@ -22,6 +23,7 @@ class Blockchain:
         self.blocks = blocks
         self.open_transactions = open_transactions
         self.__read_blockchain_file(DATA_FILE)
+        self.balance = 0
 
     def __repr__(self):
         json_str = {
@@ -148,3 +150,26 @@ class Blockchain:
             print('Blockchain mine is successful, Congratulation, you got 6.25 bitcoins')
         else:
             print('Better luck mining next time')
+
+    def get_balance(self):
+        all_transactions = []
+        received = 0.0
+        sent = 0.0
+        for block in self.blocks:
+            for tx in block.transactions[:]:
+                all_transactions.append(tx)
+
+        amount_received = [float(tx.amount)
+                           for tx in all_transactions if tx.receiver == 'XXX']
+        if len(amount_received) > 0:
+            received = functools.reduce(lambda a, b: a + b, amount_received)
+
+        amount_sent = [float(tx.amount)
+                       for tx in all_transactions if tx.sender == 'XXX']
+
+        if len(amount_sent) > 0:
+            sent = functools.reduce(lambda a, b: a+b, amount_sent)
+
+        self.balance = received - sent
+        print('Total balance: {}'.format(self.balance))
+        return self.balance

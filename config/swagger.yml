@@ -65,7 +65,15 @@ paths:
       responses:
         200:
           description: "Successfully mined the bitcoin transactions"
-
+  /balance:
+    get:
+      operationId: "api.balance"
+      tags:
+        - "Bitcoin Balance"
+      description: "all my bitcoin balance"
+      responses:
+        200:
+          description: "Successfully queried my bitcoin balance"
   
                 
 

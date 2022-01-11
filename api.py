@@ -50,3 +50,7 @@ def mine():
         'message': 'Mining bitcoin is successful',
         'status': 200
     }), 200
+
+
+def balance():
+    return blockchain.get_balance(), 200
