@@ -23,7 +23,7 @@ class Blockchain:
         self.blocks = blocks
         self.open_transactions = open_transactions
         self.__read_blockchain_file(DATA_FILE)
-        self.balance = 0
+        self.__balance = 0
 
     def __repr__(self):
         json_str = {
@@ -170,6 +170,6 @@ class Blockchain:
         if len(amount_sent) > 0:
             sent = functools.reduce(lambda a, b: a+b, amount_sent)
 
-        self.balance = received - sent
-        print('Total balance: {}'.format(self.balance))
-        return self.balance
+        self.__balance = received - sent
+        print('Total balance: {}'.format(self.__balance))
+        return self.__balance
