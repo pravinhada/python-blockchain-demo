@@ -96,6 +96,15 @@ class Blockchain:
 
     def add_new_transaction(self, transaction=None):
         """ add new transactions to the open transactions list """
+        sender = transaction.sender
+        amount = transaction.amount
+        remaining_balance = self.get_balance()
+        if sender == 'XXX':
+            if amount > remaining_balance:
+                print('Cannot send bitcoin more than balance {}, try less value'.format(
+                    remaining_balance))
+                return
+
         self.open_transactions.append(transaction)
         self.save_blockchain()
 
@@ -159,11 +168,18 @@ class Blockchain:
 
         amount_received = [float(tx.amount)
                            for tx in all_transactions if tx.receiver == 'XXX']
+
+        amount_received.extend(
+            [float(tx.amount) for tx in self.open_transactions if tx.receiver == 'XXX'])
+
         if len(amount_received) > 0:
             received = functools.reduce(lambda a, b: a + b, amount_received)
 
         amount_sent = [float(tx.amount)
                        for tx in all_transactions if tx.sender == 'XXX']
+        
+        amount_sent.extend([float(tx.amount)
+                           for tx in self.open_transactions if tx.sender == 'XXX'])
 
         if len(amount_sent) > 0:
             sent = functools.reduce(lambda a, b: a+b, amount_sent)
@@ -171,3 +187,6 @@ class Blockchain:
         self.__balance = received - sent
         print('Total balance: {}'.format(self.__balance))
         return self.__balance
+
+    def set_balance(self, amount):
+        self.__balance = amount

@@ -22,7 +22,7 @@ def create_transaction():
         data = request.json
         sender = data['sender']
         receiver = data['receiver']
-        amount = int(data['amount'])
+        amount = float(data['amount'])
         transaction = Transaction(
             sender=sender, receiver=receiver, amount=amount)
         blockchain.add_new_transaction(transaction=transaction)
