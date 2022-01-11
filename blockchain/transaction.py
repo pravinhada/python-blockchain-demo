@@ -16,3 +16,11 @@ class Transaction:
 
     def __repr__(self):
         return str(self.__dict__)
+
+    @staticmethod
+    def get_reward_transaction():
+        """ 
+        This is static method, returns the reward transaction for the user who mine the bitcoin.
+        At this moment the bitcoin mine reward is 6.25 defined in DEFAULT_REWARD
+        """
+        return Transaction(sender=constants.DEFAULT_SENDER, receiver=constants.DEFAULT_RECEIVER, amount=constants.DEFAULT_REWARD)

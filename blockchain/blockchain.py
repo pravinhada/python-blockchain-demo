@@ -81,9 +81,8 @@ class Blockchain:
         """ Returns all the blockchain, if stored in file, retrieve it otherwise return genesis block for now """
         if self.blocks is None or len(self.blocks) == 0:
             self.__add_genesis_block()
-            return self.blocks
-        else:
-            return self.blocks
+
+        return self.blocks
 
     def read_open_transactions(self):
         """ Return all the open transactions that are yet to be mined """
@@ -131,8 +130,7 @@ class Blockchain:
         open_transactions = self.open_transactions[:]
 
         # adding reward transaction too
-        open_transactions.append(Transaction(
-            sender=constants.DEFAULT_SENDER, receiver=constants.DEFAULT_RECEIVER, amount=constants.DEFAULT_REWARD))
+        open_transactions.append(Transaction.get_reward_transaction())
 
         block_to_hash = Block(
             block_id=new_block_id,
