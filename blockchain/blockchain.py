@@ -19,7 +19,11 @@ class Blockchain:
     Blockchain represent the chain of blocks containing transaction and the block hash
     """
 
-    def __init__(self, blocks=[], open_transactions=[]):
+    def __init__(self, blocks=None, open_transactions=None):
+        if open_transactions is None:
+            open_transactions = []
+        if blocks is None:
+            blocks = []
         self.blocks = blocks
         self.open_transactions = open_transactions
         self.__read_blockchain_file(DATA_FILE)

@@ -11,3 +11,9 @@
 - [POST]/api/transaction, post the new transactions accepted only json
 - [GET]/api/mine, mine the bitcoin, update blockchain and open transactions
 - [GET]/api/balance, return the bitcoin balance for the current user
+
+#### Installation & Run server
+- $python3 -m venv .venv
+- $source .venv/bin/activate
+- pip install -r requirements.txt
+- python3 main.py
