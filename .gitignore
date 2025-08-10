@@ -1,6 +1,7 @@
 .vscode
 .idea
 venv
+.venv
 .DS_Store
 __pycache__
 blockchain/__pycache__
